@@ -21,6 +21,10 @@ app.use(express.json());
 app.use(morgan("tiny"));
 app.use(authenticateJWT);
 
+app.get("/", (req, res) => {
+  res.send("Welcome to the Jobly API!");
+});
+
 app.use("/auth", authRoutes);
 app.use("/companies", companiesRoutes);
 app.use("/users", usersRoutes);

@@ -42,6 +42,7 @@ function ensureLoggedIn(req, res, next) {
   }
 }
 
+
 /** Middleware to use when they be logged in as an admin user.
  *
  *  If not, raises Unauthorized.
@@ -75,6 +76,7 @@ function ensureCorrectUserOrAdmin(req, res, next) {
     return next(err);
   }
 }
+
 
 module.exports = {
   authenticateJWT,

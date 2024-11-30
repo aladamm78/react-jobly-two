@@ -17,8 +17,7 @@ class JoblyApi {
   static async request(endpoint, data = {}, method = "get") {
     console.debug("API Call:", endpoint, data, method);
 
-    // there are multiple ways to pass an authorization token, this is how you pass it in the header.
-    // this has been provided to show you another way to pass the token. You are only expected to read this code for this project.
+    // Authorization token passed in headers
     const url = `${BASE_URL}/${endpoint}`;
     const headers = { Authorization: `Bearer ${JoblyApi.token}` };
     const params = method === "get" ? data : {};
@@ -34,13 +33,47 @@ class JoblyApi {
 
   // Individual API routes
 
-  /** Get details on a company by handle. */
+  /** Get list of companies (optionally filtered by search term). */
+  static async getCompanies(searchTerm) {
+    const res = await this.request("companies", { name: searchTerm });
+    return res.companies;
+  }
+
+  /** Get details on a specific company by handle. */
   static async getCompany(handle) {
-    let res = await this.request(`companies/${handle}`);
+    const res = await this.request(`companies/${handle}`);
     return res.company;
   }
 
-  // obviously, you'll add a lot here ...
+  /** Get list of jobs (optionally filtered by search term). */
+  static async getJobs(searchTerm) {
+    const res = await this.request("jobs", { title: searchTerm });
+    return res.jobs;
+  }
+
+  /** Apply to a job by job ID. */
+  static async applyToJob(jobId) {
+    const res = await this.request(`jobs/${jobId}/apply`, {}, "post");
+    return res.message;
+  }
+
+  /** Register a new user. */
+  static async registerUser(userData) {
+    const res = await this.request("auth/register", userData, "post");
+    return res.token;
+  }
+
+  /** Login user and return a token. */
+  static async loginUser(loginData) {
+    const res = await this.request("auth/token", loginData, "post");
+    return res.token;
+  }
+
+  /** Get details of the current user by username. */
+  static async getCurrentUser(username) {
+    const res = await this.request(`users/${username}`);
+    return res.user;
+  }
 }
 
 // Set token for current user
